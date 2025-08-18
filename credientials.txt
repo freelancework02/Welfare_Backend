@@ -1,0 +1,5 @@
+DB_HOST='bom1plzcpnl503547.prod.bom1.secureserver.net'
+DB_USER='hkxhmqn0p94j'
+DB_PASSWORD='MoS#awes77@'
+DB_NAME='Madarsawebsite'
+PORT=5000
