@@ -59,6 +59,7 @@ exports.getBlogImage = async (req, res) => {
     if (!rows.length || !rows[0].image) {
       return res.status(404).json({ error: 'Image not found' });
     }
+    // Default to jpeg, but you should save MIME type for robustness
     res.set('Content-Type', 'image/jpeg');
     res.send(rows.image);
   } catch (error) {
