@@ -53,19 +53,19 @@ exports.updateBlog = async (req, res) => {
 exports.getBlogImage = async (req, res) => {
   try {
     const { id } = req.params;
-    const [rows] = await db.query(
-      "SELECT image FROM blogs WHERE id = ?", [id]
-    );
+    const [rows] = await db.query("SELECT image FROM blogs WHERE id = ?", [id]);
+
     if (!rows.length || !rows[0].image) {
       return res.status(404).json({ error: 'Image not found' });
     }
-    // Default to jpeg, but you should save MIME type for robustness
-    res.set('Content-Type', 'image/jpeg');
-    res.send(rows.image);
+
+    res.set('Content-Type', 'image/jpeg'); // assumes jpeg
+    res.send(rows[0].image); // ✅ correct row access
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Delete a blog post by id
 exports.deleteBlog = async (req, res) => {
@@ -76,6 +76,24 @@ exports.deleteBlog = async (req, res) => {
       return res.status(404).json({ error: 'Blog not found or already deleted.' });
     }
     res.json({ message: 'Blog deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+// ✅ Get single blog by ID
+exports.getBlogById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await db.query(
+      "SELECT id, title, topic, writername, description, created_at FROM blogs WHERE id = ?",
+      [id]
+    );
+    if (!rows.length) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+    res.json(rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

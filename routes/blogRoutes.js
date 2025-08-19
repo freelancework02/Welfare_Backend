@@ -12,6 +12,9 @@ router.post('/blogs', upload.single('image'), blogController.createBlog);
 // Get blogs with pagination (limit & offset query params)
 router.get('/blogs', blogController.getBlogs);
 
+// ✅ Get single blog by ID
+router.get('/blogs/:id', blogController.getBlogById);
+
 // Update blog (all but image)
 router.put('/blogs/:id', blogController.updateBlog);
 
