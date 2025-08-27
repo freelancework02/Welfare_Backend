@@ -35,16 +35,31 @@ exports.getBlogs = async (req, res) => {
 };
 
 // Update blog (all but image)
+// Update blog (including image)
+// Update blog (including image)
 exports.updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, topic, writername, description } = req.body;
-    await db.query(
-      "UPDATE blogs SET title = ?, topic = ?, writername = ?, description = ? WHERE id = ?",
-      [title, topic, writername, description, id]
-    );
+    const image = req.file ? req.file.buffer : null;
+    
+    if (image) {
+      // Update with image
+      await db.query(
+        "UPDATE blogs SET title = ?, topic = ?, writername = ?, description = ?, image = ? WHERE id = ?",
+        [title, topic, writername, description, image, id]
+      );
+    } else {
+      // Update without changing image
+      await db.query(
+        "UPDATE blogs SET title = ?, topic = ?, writername = ?, description = ? WHERE id = ?",
+        [title, topic, writername, description, id]
+      );
+    }
+    
     res.json({ message: 'Blog updated successfully' });
   } catch (error) {
+    console.error("Update blog error:", error);
     res.status(500).json({ error: error.message });
   }
 };

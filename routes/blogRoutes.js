@@ -16,7 +16,7 @@ router.get('/blogs', blogController.getBlogs);
 router.get('/blogs/:id', blogController.getBlogById);
 
 // Update blog (all but image)
-router.put('/blogs/:id', blogController.updateBlog);
+router.put('/blogs/:id', upload.single('image'), blogController.updateBlog);
 
 // Get blog image by id
 router.get('/blogs/:id/image', blogController.getBlogImage);
